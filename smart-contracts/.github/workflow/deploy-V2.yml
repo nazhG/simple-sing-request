@@ -26,7 +26,7 @@ jobs:
         run: cd smart-contract && npm ci
 
       - name: deploy-contracts
-        run: npx hardhat deploy --deploy-scripts ./deploy/V2
+        run: npx hardhat deploy --deploy-scripts ./deploy/V2 --network mumbai
 
       - name: Commit changes
         run: |
