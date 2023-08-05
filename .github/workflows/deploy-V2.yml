@@ -21,8 +21,11 @@ jobs:
         with:
           node-version: "16.x"
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
       - name: Install dependencies
-        run: cd smart-contracts && npm install
+        run: cd smart-contracts && pnpm install
 
       - name: deploy-contracts
         run: npx hardhat deploy --deploy-scripts ./deploy/V2 --network mumbai
