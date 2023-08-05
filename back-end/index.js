@@ -73,7 +73,7 @@ app.post("/deploy", (req, res) => {
         'git add . && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force ',
         (error, stdout, stderr) => {
           if (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: stdout });
             console.error(
               `Error al ejecutar el comando git pull: ${error.message}`
             );
