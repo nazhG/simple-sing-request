@@ -24,7 +24,7 @@ jobs:
           node-version: "16.x"
       # move to smart-contract folder and install dependencies (ci clean install)
       - name: Install dependencies
-        run: cd smart-contract && npm ci
+        run: cd smart-contracts && npm ci
       # Run V1 deploy script
       - name: deploy-contracts
         run: npx hardhat deploy --deploy-scripts ./deploy/V1 --network mumbai
