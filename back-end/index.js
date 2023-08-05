@@ -67,8 +67,6 @@ app.post("/deploy", (req, res) => {
         res.status(500).json({ error: error.message });
         return;
       }
-      console.log("Archivo actualizado con éxito.");
-      
 
       // Push changes to git
       exec(
