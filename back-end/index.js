@@ -72,7 +72,7 @@ app.post("/deploy", (req, res) => {
 
   // Push changes to git
   exec(
-    'git add . && git commit -m "new deploy" && git push origin HEAD:main --force ',
+    'git add . && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force ',
     (error, stdout, stderr) => {
       if (error) {
         res.status(500).json({ error: error.message });
