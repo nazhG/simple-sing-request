@@ -53,7 +53,7 @@ app.post("/deploy", (req, res) => {
   const filePath = "../smart-contracts/deployments.txt";
   /// TODO: implent DB
   // Add new address to deployments.txt
-  fs.readFileSync(filePath, "utf8", (err, data) => {
+  fs.readFile(filePath, "utf8", (err, data) => {
     if (err) {
       res.status(500).json({ error: error.message });
       return;
@@ -62,11 +62,13 @@ app.post("/deploy", (req, res) => {
     const updatedContent =
       data + "\n" + `{ "name": "${address}" , "address": ""}`;
 
-    fs.writeFileSync(filePath, updatedContent, "utf8", (err) => {
+    fs.writeFile(filePath, updatedContent, "utf8", (err) => {
       if (err) {
         res.status(500).json({ error: error.message });
         return;
       }
+      console.log("Archivo actualizado con éxito.");
+      
 
       // Push changes to git
       exec(
