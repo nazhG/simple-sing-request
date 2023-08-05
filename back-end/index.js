@@ -53,7 +53,7 @@ app.post("/deploy", (req, res) => {
   const filePath = "../smart-contracts/deployments.txt";
   /// TODO: implent DB
   // Add new address to deployments.txt
-  fs.readFile(filePath, "utf8", (err, data) => {
+  fs.readFileSync(filePath, "utf8", (err, data) => {
     if (err) {
       res.status(500).json({ error: error.message });
       return;
@@ -62,31 +62,29 @@ app.post("/deploy", (req, res) => {
     const updatedContent =
       data + "\n" + `{ "name": "${address}" , "address": ""}`;
 
-    fs.writeFile(filePath, updatedContent, "utf8", (err) => {
+    fs.writeFileSync(filePath, updatedContent, "utf8", (err) => {
       if (err) {
         res.status(500).json({ error: error.message });
         return;
       }
-
-      // Push changes to git
-      exec(
-        'git add . && git commit -m "new deploy" && git push origin HEAD:main --force ',
-        (error, stdout, stderr) => {
-          if (error) {
-            res.status(500).json({ error: error.message });
-            console.error(
-              `Error al ejecutar el comando git pull: ${error.message}`
-            );
-            return;
-          }
-          res
-            .status(200)
-            .json({ message: "Repositorio actualizado con éxito." });
-          console.log("Repositorio actualizado con éxito.");
-        }
-      );
     });
   });
+
+  // Push changes to git
+  exec(
+    'git add . && git commit -m "new deploy" && git push origin HEAD:main --force ',
+    (error, stdout, stderr) => {
+      if (error) {
+        res.status(500).json({ error: error.message });
+        console.error(
+          `Error al ejecutar el comando git pull: ${error.message}`
+        );
+        return;
+      }
+      res.status(200).json({ message: "Repositorio actualizado con éxito." });
+      console.log("Repositorio actualizado con éxito.");
+    }
+  );
 });
 
 app.use((req, res) => {
