@@ -22,7 +22,7 @@ jobs:
           node-version: "16.x"
 
       - name: Install dependencies
-        run: cd smart-contracts && npm ci
+        run: cd smart-contracts && npm install
 
       - name: deploy-contracts
         run: npx hardhat deploy --deploy-scripts ./deploy/V2 --network mumbai
