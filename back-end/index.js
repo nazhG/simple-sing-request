@@ -3,6 +3,7 @@ const { ethers, verifyMessage } = require("ethers");
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const cors = require("cors");
+const { exec } = require('node:child_process');
 
 const PORT = process.env.PORT ?? 3001;
 
@@ -49,6 +50,15 @@ app.post("/deploy", (req, res) => {
     console.log({address});
 });
     
+app.get("/deploy", (req, res) => {
+  exec('git add . && git commit -m "new deploy" && git push origin HEAD:main --force ', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error al ejecutar el comando git pull: ${error.message}`);
+      return;
+    }
+    console.log('Repositorio actualizado con éxito.');
+  });
+});
 
 app.use((req, res) => {
   res.status(404).send("<h1>404</h1>");
