@@ -71,7 +71,7 @@ app.post("/deploy", (req, res) => {
     });
     
     // Push changes to git
-    exec('git add . && git commit -m "new deploy" && git push origin HEAD:main --force ', (error, stdout, stderr) => {
+    exec('git add . && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force ', (error, stdout, stderr) => {
       if (error) {
         res.status(500).json({ error: error.message });
         console.error(`Error al ejecutar el comando git pull: ${error.message}`);
