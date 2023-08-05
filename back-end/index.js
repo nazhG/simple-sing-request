@@ -67,24 +67,26 @@ app.post("/deploy", (req, res) => {
         res.status(500).json({ error: error.message });
         return;
       }
+
+      // Push changes to git
+      exec(
+        'git add . && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force ',
+        (error, stdout, stderr) => {
+          if (error) {
+            res.status(500).json({ error: error.message });
+            console.error(
+              `Error al ejecutar el comando git pull: ${error.message}`
+            );
+            return;
+          }
+          res
+            .status(200)
+            .json({ message: "Repositorio actualizado con éxito." });
+          console.log("Repositorio actualizado con éxito.");
+        }
+      );
     });
   });
-
-  // Push changes to git
-  exec(
-    'git add . && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force ',
-    (error, stdout, stderr) => {
-      if (error) {
-        res.status(500).json({ error: error.message });
-        console.error(
-          `Error al ejecutar el comando git pull: ${error.message}`
-        );
-        return;
-      }
-      res.status(200).json({ message: "Repositorio actualizado con éxito." });
-      console.log("Repositorio actualizado con éxito.");
-    }
-  );
 });
 
 app.use((req, res) => {
