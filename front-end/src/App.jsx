@@ -43,14 +43,26 @@ function App() {
   }
 
   const deploy = async () => {
+    // Check if Metamask is installed
+    if (typeof window.ethereum === 'undefined')
+      return setConnection(status.ERROR)
+    setConnection(status.WAITING_SIGNATURE)
+    // Connect Metamask
+    const provider = new ethers.BrowserProvider(window.ethereum)
+    // Get signer
+    const signer = await provider.getSigner()
+    // Sing message
+    const signature = await signer.signMessage('Hello world')
+    console.log({ signature })
+    setConnection(status.LOGIN)
     // Send deploy request to server
     const response = await fetch('http://localhost:3001/deploy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Access-Control-Allow-Origin': '*'
       },
+      body: JSON.stringify({ signature, address: await signer.getAddress() })
     })
     const data = await response.json()
     // Catch error

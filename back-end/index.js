@@ -10,6 +10,13 @@ const PORT = process.env.PORT ?? 3001;
 
 const secret = "secret";
 
+const mockUsers = [
+  {
+    address: "0x71d27375B1D112c63391d72846B56513967FE93D",
+    name: "user1",
+  }
+];
+
 const app = express();
 app.disable("x-powered-by");
 
@@ -22,43 +29,46 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post("/login", (req, res) => {
-  const { signature, address } = req.body;
-  const message = "Hello world";
-  console.log(signature, address, message);
-  console.log(verifyMessage);
+// app.post("/login", (req, res) => {
+//   const { signature, address } = req.body;
+//   const message = "Hello world";
+//   console.log(signature, address, message);
+//   console.log(verifyMessage);
 
-  const recoveredAddress = verifyMessage(message, signature);
+//   const recoveredAddress = verifyMessage(message, signature);
 
-  if (recoveredAddress !== address) {
-    return res.status(401).json({ error: "Signature verification failed" });
-  }
+//   if (recoveredAddress !== address) {
+//     return res.status(401).json({ error: "Signature verification failed" });
+//   }
 
-  const token = jwt.sign({ address }, secret, { expiresIn: "1h" });
+//   const token = jwt.sign({ address }, secret, { expiresIn: "1h" });
 
-  res.json({ token });
-});
+//   res.json({ token });
+// });
 
 app.post("/deploy", (req, res) => {
-  const auth = req.headers.authorization.split(" ")[1];
-  let address;
-  // Verify token and get address
-  try {
-    const { address: _address } = jwt.verify(auth, secret);
-    address = _address;
-  } catch (error) {
-    return res.status(401).json({ error: "Invalid token" });
-  }
+    const { signature, address } = req.body;
+    const message = "Hello world";
+    console.log(signature, address, message);
+    console.log(verifyMessage);
+  
+    const recoveredAddress = verifyMessage(message, signature);
+  
+    if (recoveredAddress !== address) {
+      return res.status(401).json({ error: "Signature verification failed" });
+    }
 
   const filePath = "../smart-contracts/deployments.txt";
-  /// TODO: implent DB
+  
+  const user = mockUsers.find((user) => user.address === address);
+  if (!user) {
+    return res.status(401).json({ error: "User not found" });
+  }
 
-  const updatedContent =
-    data + "\n" + `\n{ "name": "${address}" , "address": ""}`;
-
-  const newDeploy = `{ \"name\": \"${address}\" , \"address\": \"0x\"}`;
+  const newDeploy = `{ \"name\": \"${user.name}\" , \"address\": \"${user.address}\"}`;
+  
   exec(
-    `echo ${newDeploy} >> ${filePath} && git add ./ && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force && git reset --hard origin/main`,
+    `echo ${newDeploy} >> ${filePath} && git add ${filePath} && git commit -m "new deploy" && git push origin HEAD:deploy-V1 --force && git reset --hard origin/main`,
     (error, stdout, stderr) => {
       console.log(stdout);
       console.log(stderr);
