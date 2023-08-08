@@ -21,14 +21,17 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "16.x"
+          node-version: "18.x"
+      # Setup pnpm
+      - name: Use pnpm
+        run: npm install -g pnpm
           
       # move to smart-contract folder and install dependencies
       - name: Install dependencies
-        run: cd smart-contracts && npx pnpm install
+        run: cd smart-contracts && pnpm install
       # Run V1 deploy script
       - name: deploy-contracts
-        run: npx hardhat deploy --deploy-scripts ./deploy/V1 --network mumbai
+        run: cd smart-contracts && pnpm exec hardhat deploy --deploy-scripts ./deploy/V1 --network mumbai
       # push changes to main branch
       - name: Commit changes
         run: |

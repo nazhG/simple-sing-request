@@ -5,6 +5,9 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 dotenv.config();
 
+console.log(process.env);
+
+
 const config: HardhatUserConfig = {
   solidity: "0.8.17",
   networks: {

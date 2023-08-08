@@ -6,11 +6,9 @@ import fs from "node:fs";
 // Get the last line of the file "deployments.json"
 const lastLine = fs.readFileSync("deployments.txt", "utf-8").split("\n").pop();
 // Parse the last line as JSON
-const lastDeployment = JSON.parse(lastLine || "{}");
-// Check format
-if (!lastDeployment.hasOwnProperty("name") && !lastDeployment.hasOwnProperty("address")) {
-    throw new Error("No previous deployment found");
-}
+const lastDeployment = lastLine ? JSON.parse(lastLine) : { name: "V1", address: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" };
+console.log("Last deployment: ", lastDeployment);
+
 
 const contractName = lastDeployment.name;
 
