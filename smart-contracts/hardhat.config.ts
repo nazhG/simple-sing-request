@@ -13,7 +13,7 @@ const config: HardhatUserConfig = {
   networks: {
 
     hardhat: {
-      accounts: { mnemonic: process.env.MNEMONIC },
+      accounts: { mnemonic: process.env.MNEMONIC_TEST },
       forking: {
         url: process.env.MUMBAI_URL || "",
         blockNumber: 38636000,
@@ -23,7 +23,7 @@ const config: HardhatUserConfig = {
     },
     mumbai: {
       url: process.env.MUMBAI_URL,
-      accounts: { mnemonic: process.env.MNEMONIC },
+      accounts: { mnemonic: process.env.MNEMONIC_TEST },
       deploy: ["deploy/V1"],
     },
   },

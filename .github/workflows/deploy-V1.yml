@@ -25,7 +25,6 @@ jobs:
       # Setup pnpm
       - name: Use pnpm
         run: npm install -g pnpm
-          
       # move to smart-contract folder and install dependencies
       - name: Install dependencies
         run: cd smart-contracts && pnpm install
@@ -38,4 +37,8 @@ jobs:
           git config --global user.email "nazhirgonzalez@gmail.com"
           git config --global user.name "nazhG"
           git add .
-          git diff-index --quiet HEAD || git commit -m "Deploy V1" && git push origin HEAD:main
+          git diff-index --quiet HEAD || git commit -m "Deploy V1"
+          git push origin HEAD:main
+          git checkout deploy-V1
+          git reset --hard main
+          git push --force
